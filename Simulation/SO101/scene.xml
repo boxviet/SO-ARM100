@@ -11,14 +11,49 @@
         <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512"
             height="3072" />
         <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4"
-            rgb2="0.1 0.2 0.3"
-            markrgb="0.8 0.8 0.8" width="300" height="300" />
+            rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300" />
         <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5"
             reflectance="0.2" />
+        <material name="table_surface" rgba="0.1 0.4 0.1 1" reflectance="0.1" />
+        <material name="table_legs" rgba="0.6 0.4 0.2 1" />
+        <material name="net" rgba="0.9 0.9 0.9 0.5" />
+        <material name="ball_mat" rgba="0.9 0.6 0.1 1" reflectance="0.3" />
     </asset>
 
     <worldbody>
         <light pos="0 0 3.5" dir="0 0 -1" directional="true" />
         <geom name="floor" size="0 0 0.05" pos="0 0 0" type="plane" material="groundplane" />
+
+        <!-- Ping-pong table: 2.74m long, 1.525m wide, 0.76m tall -->
+        <!-- Table is positioned so the robot sits at one end -->
+        <body name="table" pos="0 0.815 0.813">
+    <geom name="table_top" type="box" size="0.37 0.815 0.02" material="table_surface" />
+    <geom name="leg_fl" type="cylinder" size="0.03 0.4065" pos="-0.34 -0.77 -0.4265" material="table_legs" />
+    <geom name="leg_fr" type="cylinder" size="0.03 0.4065" pos=" 0.34 -0.77 -0.4265" material="table_legs" />
+    <geom name="leg_nl" type="cylinder" size="0.03 0.4065" pos="-0.34  0.77 -0.4265" material="table_legs" />
+    <geom name="leg_nr" type="cylinder" size="0.03 0.4065" pos=" 0.34  0.77 -0.4265" material="table_legs" />
+    <geom name="net_post_l" type="cylinder" size="0.01 0.085" pos="-0.38 0 0.085" material="table_legs" />
+    <geom name="net_post_r" type="cylinder" size="0.01 0.085" pos=" 0.38 0 0.085" material="table_legs" />
+    <geom name="net_mesh"   type="box" size="0.375 0.005 0.075" pos="0 0 0.095" material="net" />
+</body>
+
+        <!-- Ping-pong ball: 40mm diameter, very light (2.7g) -->
+        <body name="ball" pos="0 0.3 1.2">
+            <freejoint name="ball_joint" />
+            <geom name="ball" type="sphere" size="0.02"
+                  material="ball_mat"
+                  mass="0.0027"
+                  solref="0.005 1"
+                  solimp="0.95 0.99 0.001"
+                  condim="4"
+                  friction="0.6 0.1 0.1" />
+        </body>
+    
+        <body name="my_body" pos="0 0 1">
+    <!-- This creates a visible red dot at the center of the body -->
+           <site name="target_point" pos="0 0 0" size="0.01" rgba="1 0 0 1" type="sphere"/>
+        </body>
+
     </worldbody>
+
 </mujoco>
